@@ -1,6 +1,6 @@
 // Este arquivo é o nosso backend (a "cozinha").
 // Ele recebe os pedidos do frontend, processa-os de forma segura
-// e chama a API do Gemini.
+// e chama a API do Gemini com instruções avançadas.
 
 exports.handler = async function (event) {
   // A API do Gemini só aceita o método POST.
@@ -12,7 +12,7 @@ exports.handler = async function (event) {
     // 1. Pega os dados enviados pelo frontend (o tipo de ação e o conteúdo).
     const { action, payload } = JSON.parse(event.body);
     const apiKey = process.env.GEMINI_API_KEY; // Pega a chave secreta do ambiente da Netlify.
-
+    
     if (!apiKey) {
         throw new Error("A chave da API do Gemini não foi configurada no servidor.");
     }
@@ -26,7 +26,7 @@ exports.handler = async function (event) {
         geminiPayload = {
           contents: [{
             role: "user",
-            parts: [{ text: `Aja como um especialista em hardware com acesso a preços do mercado brasileiro em junho de 2025. O usuário pediu: "${payload.prompt}". Sua tarefa é: 1. Criar uma build de PC plausível, respeitando o orçamento. 2. Para cada peça, forneça um preço ('bestPrice') realista para o varejo online brasileiro (Kabum, Pichau, etc.). NÃO use preços de importação ou antigos. 3. O nome do componente ('component') deve estar em português. 4. Forneça uma análise da build. Responda em JSON.` }]
+            parts: [{ text: `Aja como um robô de busca e especialista em hardware. Sua tarefa é simular uma busca em tempo real (junho de 2025) no Google Shopping Brasil para montar um PC baseado no pedido do usuário: "${payload.prompt}". Para cada componente da build, você deve: 1. Encontrar o melhor preço realista ('bestPrice') disponível hoje no varejo online brasileiro (Kabum!, Pichau, Terabyte, etc.). Ignore preços de importação ou valores claramente desatualizados. 2. Informar a loja ('store') onde este preço foi encontrado. 3. O nome do componente ('component') deve estar em português. 4. Fornecer uma análise da build, justificando as escolhas baseadas no custo-benefício. A resposta DEVE ser um objeto JSON válido.` }]
           }],
           generationConfig: {
             responseMimeType: "application/json",
@@ -63,13 +63,13 @@ exports.handler = async function (event) {
 
       case 'optimizeBuild':
          geminiPayload = {
-            contents: [{ role: "user", parts: [{ text: `Dada a build: <span class="math-inline">\{JSON\.stringify\(payload\.build\)\}, e o pedido\: "</span>{payload.prompt}", sugira 1 ou 2 trocas para melhorar o custo-benefício. Explique a vantagem. Responda em texto simples.` }] }]
+            contents: [{ role: "user", parts: [{ text: `Dada a build: ${JSON.stringify(payload.build)}, e o pedido: "${payload.prompt}", sugira 1 ou 2 trocas para melhorar o custo-benefício. Explique a vantagem. Responda em texto simples.` }] }]
          };
          break;
-
+      
       case 'explainComponent':
           geminiPayload = {
-              contents: [{ role: "user", parts: [{ text: `Explique em português, de forma simples para um iniciante, o que é um(a) "<span class="math-inline">\{payload\.component\}" e por que o modelo "</span>{payload.name}" é uma escolha considerável.` }] }]
+              contents: [{ role: "user", parts: [{ text: `Explique em português, de forma simples para um iniciante, o que é um(a) "${payload.component}" e por que o modelo "${payload.name}" é uma escolha considerável.` }] }]
           };
           break;
 
@@ -90,7 +90,7 @@ exports.handler = async function (event) {
     }
 
     const result = await response.json();
-
+    
     // 4. Retorna a resposta da IA para o frontend.
     return {
       statusCode: 200,
