@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Negócios: PCBarato.ai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutrals (Stone/Slate) with Muted Teal Accent -->
+    <!-- Application Structure Plan: A single-page, scrollable dashboard design with a fixed navigation bar. The structure thematically groups the business plan's content: 1. Hero/Concept, 2. Ecosystem (Audience + Value), 3. How it Works (Features), 4. Business Model (Monetization), 5. Roadmap (Next Steps). This structure transforms the linear report into a guided, interactive tour of the business idea, making it more engaging and easier to digest than a static document. User flow is guided by nav links and scrolling. Gemini API is integrated into the hero section to make the core concept interactive. -->
+    <!-- Visualization & Content Choices: 1. Concept: Inform/Engage -> Hero text with an interactive search bar powered by the Gemini API. It parses user input, generates a sample PC build with price estimates, simulated purchase links, and provides an AI-driven analysis. This makes the "AI" concept tangible and useful. 2. Audience/Value: Organize -> Interactive cards (HTML/JS) to show the direct relationship between a target user and their benefits. 3. Features: Explain Process -> Visual flowchart (HTML/CSS) to simplify the technical flow. 4. Monetization: Compare Proportions -> Donut Chart (Chart.js) to visually represent revenue streams, adding a data-driven feel. 5. Next Steps: Organize -> Styled checklist (HTML/CSS) for a clear, actionable roadmap. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #14b8a6;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-teal-600">PCBarato.ai</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#conceito" class="nav-link text-slate-600 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium">O Conceito</a>
+                        <a href="#ecossistema" class="nav-link text-slate-600 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium">Ecossistema</a>
+                        <a href="#como-funciona" class="nav-link text-slate-600 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium">Como Funciona</a>
+                        <a href="#monetizacao" class="nav-link text-slate-600 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium">Monetização</a>
+                        <a href="#roadmap" class="nav-link text-slate-600 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium">Próximos Passos</a>
+                    </div>
+                </div>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-teal-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Abrir menu principal</span>
+                        <div id="hamburger-icon" class="block h-6 w-6">
+                           <span class="block w-6 h-0.5 bg-current transform transition duration-500 ease-in-out"></span>
+                           <span class="block w-6 h-0.5 bg-current mt-1.5 transform transition duration-500 ease-in-out"></span>
+                           <span class="block w-6 h-0.5 bg-current mt-1.5 transform transition duration-500 ease-in-out"></span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                 <a href="#conceito" class="mobile-nav-link block text-slate-600 hover:text-teal-600 hover:bg-slate-100 px-3 py-2 rounded-md text-base font-medium">O Conceito</a>
+                 <a href="#ecossistema" class="mobile-nav-link block text-slate-600 hover:text-teal-600 hover:bg-slate-100 px-3 py-2 rounded-md text-base font-medium">Ecossistema</a>
+                 <a href="#como-funciona" class="mobile-nav-link block text-slate-600 hover:text-teal-600 hover:bg-slate-100 px-3 py-2 rounded-md text-base font-medium">Como Funciona</a>
+                 <a href="#monetizacao" class="mobile-nav-link block text-slate-600 hover:text-teal-600 hover:bg-slate-100 px-3 py-2 rounded-md text-base font-medium">Monetização</a>
+                 <a href="#roadmap" class="mobile-nav-link block text-slate-600 hover:text-teal-600 hover:bg-slate-100 px-3 py-2 rounded-md text-base font-medium">Próximos Passos</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="conceito" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-slate-900">Monte o PC dos seus sonhos, sem gastar um centavo a mais.</h1>
+                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-slate-600">O PCBarato.ai é seu assistente inteligente que encontra as melhores peças com o menor preço, em tempo real. Diga o que você precisa, e nós montamos a build perfeita para o seu bolso.</p>
+                <div class="mt-10 max-w-xl mx-auto">
+                    <div class="bg-white rounded-lg shadow-lg p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                        <input id="pc-request-input" type="text" placeholder="Ex: PC para jogar Fortnite com R$4000" class="w-full bg-transparent text-slate-700 placeholder-slate-400 focus:outline-none px-4 py-3 sm:py-0 border border-slate-200 sm:border-none rounded-md">
+                        <button id="generate-build-button" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-md transition-colors duration-300 whitespace-nowrap flex items-center justify-center gap-2">
+                            <span>✨ Montar PC com IA</span>
+                        </button>
+                    </div>
+                </div>
+                 <div id="ai-results" class="hidden mt-12 max-w-4xl mx-auto text-left">
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Build Sugerida pela IA</h3>
+                        <div id="ai-analysis" class="mb-6 p-4 bg-teal-50 border-l-4 border-teal-500 rounded-r-lg text-teal-800"></div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-slate-200">
+                                <thead class="bg-slate-100">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Componente</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Sugestão</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Valor Estimado (BRL)</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="build-table-body" class="bg-white divide-y divide-slate-200">
+                                </tbody>
+                                <tfoot id="build-table-foot" class="bg-slate-100">
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div id="error-message" class="hidden mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-r-lg"></div>
+                         <button id="clear-results-button" class="mt-6 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-md transition-colors duration-300">Limpar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ecossistema" class="py-20 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Um Ecossistema de Valor</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">Entendemos quem são nossos usuários e o que eles mais valorizam. Nossa plataforma foi desenhada para atender às necessidades específicas de cada perfil, entregando a solução ideal com total transparência.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="audience-card bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer border-2 border-transparent" data-target="gamer">
+                        <div class="flex items-center mb-4">
+                             <span class="text-3xl mr-4">🎮</span>
+                            <h3 class="text-xl font-bold text-slate-800">Gamers Iniciantes</h3>
+                        </div>
+                        <p class="text-slate-600">Buscam o máximo de FPS por real investido, sem a complexidade de escolher cada peça.</p>
+                    </div>
+                    <div class="audience-card bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer border-2 border-transparent" data-target="professional">
+                        <div class="flex items-center mb-4">
+                             <span class="text-3xl mr-4">💼</span>
+                            <h3 class="text-xl font-bold text-slate-800">Estudantes e Profissionais</h3>
+                        </div>
+                        <p class="text-slate-600">Precisam de uma máquina confiável para trabalho ou estudo, sem serem especialistas em hardware.</p>
+                    </div>
+                    <div class="audience-card bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer border-2 border-transparent" data-target="enthusiast">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-4">🔧</span>
+                            <h3 class="text-xl font-bold text-slate-800">Entusiastas Caça-Promoções</h3>
+                        </div>
+                        <p class="text-slate-600">Já conhecem hardware, mas querem automatizar a busca pelas melhores pechinchas do mercado.</p>
+                    </div>
+                </div>
+
+                <div id="value-proposition-display" class="mt-12 bg-teal-50 border-l-4 border-teal-500 p-8 rounded-r-lg transition-opacity duration-500 opacity-0 min-h-[180px]">
+                    <div id="gamer-value" class="value-content hidden">
+                        <h4 class="text-2xl font-bold text-teal-900 mb-3">Proposta de Valor para Gamers</h4>
+                        <ul class="list-disc list-inside space-y-2 text-teal-800">
+                            <li><strong>Economia de Tempo e Dinheiro:</strong> Montamos a build com o melhor custo-benefício, comparando preços em tempo real.</li>
+                            <li><strong>Decisão Simplificada:</strong> Traduzimos "rodar um jogo" em uma lista de peças compatíveis e com links de compra.</li>
+                            <li><strong>Confiança e Transparência:</strong> Mostramos benchmarks estimados (FPS) e vídeos de testes de builds similares.</li>
+                        </ul>
+                    </div>
+                    <div id="professional-value" class="value-content hidden">
+                         <h4 class="text-2xl font-bold text-teal-900 mb-3">Proposta para Profissionais</h4>
+                        <ul class="list-disc list-inside space-y-2 text-teal-800">
+                            <li><strong>Eficiência Garantida:</strong> Foco em componentes para produtividade, como mais RAM e processadores com múltiplos núcleos.</li>
+                            <li><strong>Compra sem Estresse:</strong> Evita o jargão técnico e oferece uma solução "plug-and-play" para suas necessidades.</li>
+                            <li><strong>Investimento Inteligente:</strong> Garante que você não pague a mais por performance que não usará.</li>
+                        </ul>
+                    </div>
+                    <div id="enthusiast-value" class="value-content hidden">
+                         <h4 class="text-2xl font-bold text-teal-900 mb-3">Proposta para Entusiastas</h4>
+                        <ul class="list-disc list-inside space-y-2 text-teal-800">
+                            <li><strong>Agilidade na Pesquisa:</strong> Automatiza a caça por promoções, cupons e melhores condições de parcelamento.</li>
+                            <li><strong>Descoberta de Oportunidades:</strong> Alerta sobre quedas de preço e disponibilidade de estoque em diversas lojas.</li>
+                            <li><strong>Controle Total:</strong> Permite comparar builds e customizar a lista final antes da compra.</li>
+                        </ul>
+                    </div>
+                     <div id="default-value" class="value-content">
+                        <p class="text-lg text-teal-700">Clique em um perfil de público acima para ver a proposta de valor específica para ele.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="como-funciona" class="py-20 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Como a Mágica Acontece</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">Nossa plataforma utiliza um processo de quatro etapas para transformar sua necessidade em uma lista de compras otimizada, garantindo compatibilidade, o melhor preço e desempenho.</p>
+                </div>
+
+                <div class="relative">
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 -translate-y-1/2"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+                        
+                        <div class="text-center">
+                            <div class="flex justify-center items-center mx-auto w-16 h-16 rounded-full bg-teal-500 text-white font-bold text-2xl border-4 border-white shadow-lg mb-4">1</div>
+                            <h3 class="font-bold text-lg mb-2">Input do Usuário ✨</h3>
+                            <p class="text-slate-600 text-sm">Você nos diz o que precisa e nossa IA interpreta seu pedido.</p>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="flex justify-center items-center mx-auto w-16 h-16 rounded-full bg-teal-500 text-white font-bold text-2xl border-4 border-white shadow-lg mb-4">2</div>
+                            <h3 class="font-bold text-lg mb-2">Análise da IA</h3>
+                            <p class="text-slate-600 text-sm">Nosso motor de recomendação identifica as peças ideais, seus preços e a compatibilidade.</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="flex justify-center items-center mx-auto w-16 h-16 rounded-full bg-teal-500 text-white font-bold text-2xl border-4 border-white shadow-lg mb-4">3</div>
+                            <h3 class="font-bold text-lg mb-2">Busca em Tempo Real</h3>
+                            <p class="text-slate-600 text-sm">Buscamos preços, estoque e cupons nas maiores lojas do Brasil (conceitual).</p>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="flex justify-center items-center mx-auto w-16 h-16 rounded-full bg-teal-500 text-white font-bold text-2xl border-4 border-white shadow-lg mb-4">4</div>
+                            <h3 class="font-bold text-lg mb-2">Build Finalizada ✨</h3>
+                            <p class="text-slate-600 text-sm">A IA apresenta a melhor build, com análise, estimativa de preço e links para compra.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="monetizacao" class="py-20 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Modelo de Negócio Sustentável</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">Nossa receita é gerada de forma transparente, alinhada ao nosso objetivo de oferecer o melhor serviço ao usuário. O foco está em criar valor real, que se traduz em um modelo de negócio saudável e escalável.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="chart-container">
+                            <canvas id="monetizationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-4 h-4 rounded-full bg-teal-500 mt-1.5 mr-4 flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Marketing de Afiliados (Principal)</h4>
+                                <p class="text-slate-600">Recebemos uma comissão sobre as vendas realizadas através dos nossos links, sem custo adicional para o usuário. É o nosso principal motor de receita.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                             <div class="w-4 h-4 rounded-full bg-cyan-500 mt-1.5 mr-4 flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Publicidade Display (Adsense)</h4>
+                                <p class="text-slate-600">Anúncios contextuais e não intrusivos que complementam a receita e ajudam a manter a plataforma gratuita.</p>
+                            </div>
+                        </div>
+                         <div class="flex items-start">
+                             <div class="w-4 h-4 rounded-full bg-sky-500 mt-1.5 mr-4 flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Conteúdo e YouTube</h4>
+                                <p class="text-slate-600">Um canal testando as builds gera autoridade, atrai tráfego e pode ser monetizado via ads e patrocínios, fortalecendo a marca.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="py-20 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                 <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Nossos Próximos Passos</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">Temos um caminho claro para transformar esta visão em realidade. O foco inicial é na validação técnica e no desenvolvimento de um produto mínimo viável (MVP) robusto e funcional.</p>
+                </div>
+                <div class="max-w-2xl mx-auto">
+                    <ul class="space-y-6">
+                        <li class="flex items-center">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mr-4">
+                                <span class="text-teal-600 font-bold">1</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">Validação Técnica</h4>
+                                <p class="text-slate-600">Pesquisar APIs das lojas alvo e planejar a arquitetura de web scraping para garantir a coleta de dados em tempo real.</p>
+                            </div>
+                        </li>
+                         <li class="flex items-center">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mr-4">
+                                 <span class="text-teal-600 font-bold">2</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">Design UX/UI</h4>
+                                <p class="text-slate-600">Criar uma interface intuitiva, com foco na simplicidade da barra de busca e na clareza dos resultados da build.</p>
+                            </div>
+                        </li>
+                         <li class="flex items-center">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mr-4">
+                                 <span class="text-teal-600 font-bold">3</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">Desenvolvimento do MVP</h4>
+                                <p class="text-slate-600">Lançar a primeira versão com 2-3 lojas parceiras e as funcionalidades essenciais de montagem e comparação.</p>
+                            </div>
+                        </li>
+                         <li class="flex items-center">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mr-4">
+                                 <span class="text-teal-600 font-bold">4</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">Estratégia de Conteúdo</h4>
+                                <p class="text-slate-600">Iniciar o canal do YouTube e o blog para construir audiência e autoridade no nicho antes mesmo do lançamento.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 PCBarato.ai. Um novo jeito de montar seu PC.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const generateBuildButton = document.getElementById('generate-build-button');
+            const pcRequestInput = document.getElementById('pc-request-input');
+            const aiResultsContainer = document.getElementById('ai-results');
+            const aiAnalysisDiv = document.getElementById('ai-analysis');
+            const buildTableBody = document.getElementById('build-table-body');
+            const buildTableFoot = document.getElementById('build-table-foot');
+            const errorMessageDiv = document.getElementById('error-message');
+            const clearResultsButton = document.getElementById('clear-results-button');
+
+            const setButtonLoadingState = (isLoading) => {
+                const buttonText = generateBuildButton.querySelector('span');
+                if (isLoading) {
+                    generateBuildButton.disabled = true;
+                    generateBuildButton.classList.add('opacity-75', 'cursor-not-allowed');
+                    buttonText.innerHTML = '<span class="spinner"></span>';
+                } else {
+                    generateBuildButton.disabled = false;
+                    generateBuildButton.classList.remove('opacity-75', 'cursor-not-allowed');
+                    buttonText.innerHTML = '✨ Montar PC com IA';
+                }
+            };
+            
+            const displayError = (message) => {
+                errorMessageDiv.textContent = message;
+                errorMessageDiv.classList.remove('hidden');
+                aiAnalysisDiv.classList.add('hidden');
+                buildTableBody.parentElement.classList.add('hidden');
+            };
+            
+            clearResultsButton.addEventListener('click', () => {
+                aiResultsContainer.classList.add('hidden');
+                pcRequestInput.value = '';
+            });
+
+            generateBuildButton.addEventListener('click', async () => {
+                const prompt = pcRequestInput.value;
+                if (!prompt) {
+                    alert('Por favor, descreva o PC que você deseja.');
+                    return;
+                }
+
+                setButtonLoadingState(true);
+                aiResultsContainer.classList.remove('hidden');
+                errorMessageDiv.classList.add('hidden');
+                buildTableBody.innerHTML = '';
+                buildTableFoot.innerHTML = '';
+                aiAnalysisDiv.innerHTML = '';
+
+
+                try {
+                    const chatHistory = [{
+                        role: "user",
+                        parts: [{ text: `O usuário brasileiro pediu uma sugestão de PC com a seguinte descrição: "${prompt}". Sua tarefa é criar uma lista de peças de computador (build) plausível para o mercado brasileiro, respeitando o orçamento mencionado. Para cada item na lista 'build', o campo 'component' DEVE estar em português (ex: Placa-Mãe, Processador, Placa de Vídeo, Fonte de Alimentação, Gabinete, Memória RAM, Armazenamento). Para cada componente, forneça também uma estimativa de preço realista em BRL (Reais), com um valor mínimo (minPrice) e máximo (maxPrice) como números inteiros, e um campo 'productUrl' que seja um link de busca no Google Shopping para o nome do produto (ex: 'https://www.google.com/search?q=AMD+Ryzen+5+5600G&tbm=shop'). Finalmente, forneça uma breve análise sobre a build, explicando por que ela é adequada para o pedido do usuário. A resposta deve ser um objeto JSON.` }]
+                    }];
+                    
+                    const payload = {
+                        contents: chatHistory,
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "OBJECT",
+                                properties: {
+                                    analysis: { type: "STRING" },
+                                    build: {
+                                        type: "ARRAY",
+                                        items: {
+                                            type: "OBJECT",
+                                            properties: {
+                                                component: { type: "STRING" },
+                                                name: { type: "STRING" },
+                                                minPrice: { type: "NUMBER" },
+                                                maxPrice: { type: "NUMBER" },
+                                                productUrl: { type: "STRING" }
+                                            },
+                                            required: ["component", "name", "minPrice", "maxPrice", "productUrl"]
+                                        }
+                                    }
+                                },
+                                required: ["analysis", "build"]
+                            }
+                        }
+                    };
+
+                    const apiKey = "AIzaSyCW3KYZrARWEmPD6FzMfnm4lsfQXbmn9ZI"; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        let errorBody = 'Não foi possível obter detalhes do erro.';
+                        try {
+                            const errorJson = await response.json();
+                            errorBody = errorJson.error?.message || JSON.stringify(errorJson);
+                        } catch (e) {
+                            errorBody = response.statusText;
+                        }
+                       throw new Error(`A API retornou um erro (${response.status}): ${errorBody}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        
+                        const jsonText = result.candidates[0].content.parts[0].text;
+                        const data = JSON.parse(jsonText);
+                        
+                        aiAnalysisDiv.textContent = data.analysis;
+                        aiAnalysisDiv.classList.remove('hidden');
+                        
+                        buildTableBody.parentElement.classList.remove('hidden');
+                        
+                        let totalMin = 0;
+                        let totalMax = 0;
+
+                        data.build.forEach(item => {
+                            const row = buildTableBody.insertRow();
+                            row.className = 'hover:bg-slate-50';
+                            const cell1 = row.insertCell(0);
+                            const cell2 = row.insertCell(1);
+                            const cell3 = row.insertCell(2);
+                            const cell4 = row.insertCell(3);
+
+                            cell1.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900';
+                            cell2.className = 'px-6 py-4 whitespace-nowrap text-sm text-slate-500';
+                            cell3.className = 'px-6 py-4 whitespace-nowrap text-sm text-slate-500';
+                            cell4.className = 'px-6 py-4 whitespace-nowrap text-sm text-center';
+
+                            cell1.textContent = item.component;
+                            cell2.textContent = item.name;
+                            cell3.textContent = `R$ ${item.minPrice} - R$ ${item.maxPrice}`;
+                            
+                            const linkButton = document.createElement('a');
+                            linkButton.href = item.productUrl;
+                            linkButton.target = '_blank';
+                            linkButton.rel = 'noopener noreferrer';
+                            linkButton.className = 'inline-block bg-teal-100 text-teal-700 hover:bg-teal-200 font-semibold py-1 px-3 rounded-full text-xs transition-colors';
+                            linkButton.textContent = 'Ver Preço';
+                            cell4.appendChild(linkButton);
+                            
+                            totalMin += item.minPrice;
+                            totalMax += item.maxPrice;
+                        });
+
+                        const footerRow = buildTableFoot.insertRow();
+                        const totalCellLabel = footerRow.insertCell(0);
+                        totalCellLabel.colSpan = 2;
+                        totalCellLabel.className = 'px-6 py-4 text-right text-sm font-bold text-slate-800';
+                        totalCellLabel.textContent = 'Total Estimado:';
+                        
+                        const totalCellValue = footerRow.insertCell(1);
+                        totalCellValue.colSpan = 2;
+                        totalCellValue.className = 'px-6 py-4 text-left text-sm font-bold text-slate-800';
+                        totalCellValue.textContent = `R$ ${totalMin} - R$ ${totalMax}`;
+                        
+                        const disclaimerRow = buildTableFoot.insertRow();
+                        const disclaimerCell = disclaimerRow.insertCell(0);
+                        disclaimerCell.colSpan = 4;
+                        disclaimerCell.className = 'px-6 py-2 text-center text-xs text-slate-500';
+                        disclaimerCell.textContent = '* Este é um valor base estimado e não inclui frete ou promoções específicas. Os preços podem variar.';
+
+                        aiResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    } else {
+                        throw new Error("A resposta da IA não continha os dados esperados.");
+                    }
+                } catch (error) {
+                    console.error("Erro ao chamar a API Gemini:", error);
+                    displayError(`Ocorreu um erro ao gerar a build. Por favor, tente novamente. Detalhes: ${error.message}`);
+                } finally {
+                    setButtonLoadingState(false);
+                }
+            });
+
+            const audienceCards = document.querySelectorAll('.audience-card');
+            const valueDisplay = document.getElementById('value-proposition-display');
+            const valueContents = document.querySelectorAll('.value-content');
+            const defaultContent = document.getElementById('default-value');
+            let activeCard = null;
+
+            audienceCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const targetId = card.dataset.target;
+                    const targetContent = document.getElementById(`${targetId}-value`);
+
+                    if (activeCard === card) {
+                        card.classList.remove('border-teal-500', 'bg-teal-50');
+                        activeCard = null;
+                        
+                        valueContents.forEach(content => content.classList.add('hidden'));
+                        defaultContent.classList.remove('hidden');
+
+                    } else {
+                        if (activeCard) {
+                            activeCard.classList.remove('border-teal-500', 'bg-teal-50');
+                        }
+                        
+                        card.classList.add('border-teal-500', 'bg-teal-50');
+                        activeCard = card;
+
+                        valueContents.forEach(content => content.classList.add('hidden'));
+                        if (targetContent) {
+                            targetContent.classList.remove('hidden');
+                        }
+                        valueDisplay.classList.remove('opacity-0');
+                    }
+                });
+            });
+
+            const ctx = document.getElementById('monetizationChart').getContext('2d');
+            const monetizationChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Marketing de Afiliados', 'Publicidade (Adsense)', 'Conteúdo e YouTube'],
+                    datasets: [{
+                        label: 'Fontes de Receita',
+                        data: [70, 20, 10],
+                        backgroundColor: ['#14b8a6', '#06b6d4', '#0ea5e9'],
+                        borderColor: '#f8fafc',
+                        borderWidth: 4,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                            cornerRadius: 4,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed !== null) { label += context.parsed + '%'; }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                hamburgerIcon.children[0].classList.toggle('rotate-45');
+                hamburgerIcon.children[0].classList.toggle('translate-y-2');
+                hamburgerIcon.children[1].classList.toggle('opacity-0');
+                hamburgerIcon.children[2].classList.toggle('-rotate-45');
+                hamburgerIcon.children[2].classList.toggle('-translate-y-2');
+            });
+            
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    hamburgerIcon.children[0].classList.remove('rotate-45', 'translate-y-2');
+                    hamburgerIcon.children[1].classList.remove('opacity-0');
+                    hamburgerIcon.children[2].classList.remove('-rotate-45', '-translate-y-2');
+                });
+            });
+
+            const sections = document.querySelectorAll('main section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active', 'text-teal-600');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active', 'text-teal-600');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => { observer.observe(section); });
+        });
+    </script>
+</body>
+</html>
