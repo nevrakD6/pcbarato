@@ -3,65 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plano de Negócios: PCBarato.ai</title>
+    <title>PCBarato: Seu Assistente de Montagem de PC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Chosen Palette: Warm Neutrals (Stone/Slate) with Muted Teal Accent -->
-    <!-- Application Structure Plan: A single-page, scrollable dashboard design with a fixed navigation bar. The structure thematically groups the business plan's content: 1. Hero/Concept, 2. Ecosystem (Audience + Value), 3. How it Works (Features), 4. Business Model (Monetization), 5. Roadmap (Next Steps). This structure transforms the linear report into a guided, interactive tour of the business idea, making it more engaging and easier to digest than a static document. User flow is guided by nav links and scrolling. Gemini API is integrated into the hero section to make the core concept interactive. -->
-    <!-- Visualization & Content Choices: 1. Concept: Inform/Engage -> Hero text with an interactive search bar powered by the Gemini API. It parses user input, generates a sample PC build with price estimates, simulated purchase links, and provides an AI-driven analysis. This makes the "AI" concept tangible and useful. 2. Audience/Value: Organize -> Interactive cards (HTML/JS) to show the direct relationship between a target user and their benefits. 3. Features: Explain Process -> Visual flowchart (HTML/CSS) to simplify the technical flow. 4. Monetization: Compare Proportions -> Donut Chart (Chart.js) to visually represent revenue streams, adding a data-driven feel. 5. Next Steps: Organize -> Styled checklist (HTML/CSS) for a clear, actionable roadmap. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #14b8a6;
-            transition: width 0.3s ease;
-        }
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .nav-link { transition: all 0.3s ease; position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background-color: #14b8a6; transition: width 0.3s ease; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+        .modal-spinner { border-top-color: #0d9488; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -70,7 +28,7 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <span class="font-bold text-xl text-teal-600">PCBarato.ai</span>
+                    <span class="font-bold text-xl text-teal-600">PCBarato</span>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
@@ -108,7 +66,7 @@
         <section id="conceito" class="py-20 md:py-28 bg-white">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-slate-900">Monte o PC dos seus sonhos, sem gastar um centavo a mais.</h1>
-                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-slate-600">O PCBarato.ai é seu assistente inteligente que encontra as melhores peças com o menor preço, em tempo real. Diga o que você precisa, e nós montamos a build perfeita para o seu bolso.</p>
+                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-slate-600">O PCBarato é seu assistente inteligente que encontra as melhores peças com o menor preço. Diga o que você precisa, e nós montamos a build perfeita para o seu bolso.</p>
                 <div class="mt-10 max-w-xl mx-auto">
                     <div class="bg-white rounded-lg shadow-lg p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                         <input id="pc-request-input" type="text" placeholder="Ex: PC para jogar Fortnite com R$4000" class="w-full bg-transparent text-slate-700 placeholder-slate-400 focus:outline-none px-4 py-3 sm:py-0 border border-slate-200 sm:border-none rounded-md">
@@ -127,8 +85,8 @@
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Componente</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Sugestão</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Valor Estimado (BRL)</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Link</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Melhor Preço Encontrado</th>
+                                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="build-table-body" class="bg-white divide-y divide-slate-200">
@@ -138,7 +96,30 @@
                             </table>
                         </div>
                         <div id="error-message" class="hidden mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-r-lg"></div>
-                         <button id="clear-results-button" class="mt-6 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-md transition-colors duration-300">Limpar</button>
+                        
+                        <div id="results-actions" class="hidden mt-6 flex flex-wrap items-center gap-4">
+                            <button id="optimize-build-button" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300 flex items-center justify-center gap-2">
+                                <span>✨ Otimizar Custo-Benefício</span>
+                            </button>
+                             <button id="analyze-fps-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300 flex items-center justify-center gap-2">
+                                <span>🎮 Analisar Desempenho</span>
+                            </button>
+                            <button id="clear-results-button" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-md transition-colors duration-300">Limpar</button>
+                        </div>
+                        
+                        <div id="optimization-result-container" class="hidden mt-6">
+                             <h4 class="text-xl font-bold text-slate-800 mb-2">Análise de Otimização ✨</h4>
+                             <div id="optimization-result-text" class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg text-amber-800"></div>
+                        </div>
+
+                        <div id="fps-analysis-container" class="hidden mt-6">
+                            <h4 class="text-xl font-bold text-slate-800 mb-2">Análise de Desempenho (FPS) 🎮</h4>
+                            <div id="fps-text-analysis" class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg text-blue-800"></div>
+                            <div class="chart-container">
+                                <canvas id="fpsChart"></canvas>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -233,13 +214,13 @@
                         <div class="text-center">
                             <div class="flex justify-center items-center mx-auto w-16 h-16 rounded-full bg-teal-500 text-white font-bold text-2xl border-4 border-white shadow-lg mb-4">3</div>
                             <h3 class="font-bold text-lg mb-2">Busca em Tempo Real</h3>
-                            <p class="text-slate-600 text-sm">Buscamos preços, estoque e cupons nas maiores lojas do Brasil (conceitual).</p>
+                            <p class="text-slate-600 text-sm">Simulamos buscas de preços e cupons nas maiores lojas do Brasil.</p>
                         </div>
 
                         <div class="text-center">
                             <div class="flex justify-center items-center mx-auto w-16 h-16 rounded-full bg-teal-500 text-white font-bold text-2xl border-4 border-white shadow-lg mb-4">4</div>
                             <h3 class="font-bold text-lg mb-2">Build Finalizada ✨</h3>
-                            <p class="text-slate-600 text-sm">A IA apresenta a melhor build, com análise, estimativa de preço e links para compra.</p>
+                            <p class="text-slate-600 text-sm">A IA apresenta a melhor build, com análise, preço "ao vivo" e links para compra.</p>
                         </div>
                     </div>
                 </div>
@@ -338,9 +319,24 @@
 
     <footer class="bg-slate-800 text-slate-300">
         <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2025 PCBarato.ai. Um novo jeito de montar seu PC.</p>
+            <p>&copy; 2025 PCBarato. Um novo jeito de montar seu PC.</p>
         </div>
     </footer>
+
+    <!-- Explanation Modal -->
+    <div id="explanation-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+                <h3 id="modal-title" class="text-xl font-bold">Explicando o Componente</h3>
+                <button id="close-modal-button" class="text-slate-500 hover:text-slate-800 text-2xl leading-none">&times;</button>
+            </div>
+            <div id="modal-body" class="p-6">
+                <div class="flex justify-center items-center h-24">
+                    <div class="spinner modal-spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -352,18 +348,33 @@
             const buildTableBody = document.getElementById('build-table-body');
             const buildTableFoot = document.getElementById('build-table-foot');
             const errorMessageDiv = document.getElementById('error-message');
+            const resultsActions = document.getElementById('results-actions');
             const clearResultsButton = document.getElementById('clear-results-button');
+            const optimizeBuildButton = document.getElementById('optimize-build-button');
+            const optimizationResultContainer = document.getElementById('optimization-result-container');
+            const optimizationResultText = document.getElementById('optimization-result-text');
+            const analyzeFpsButton = document.getElementById('analyze-fps-button');
+            const fpsAnalysisContainer = document.getElementById('fps-analysis-container');
+            const fpsTextAnalysis = document.getElementById('fps-text-analysis');
+            const fpsChartCanvas = document.getElementById('fpsChart');
+            const explanationModal = document.getElementById('explanation-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const closeModalButton = document.getElementById('close-modal-button');
+            
+            let currentBuildData = null;
+            let fpsChartInstance = null;
 
-            const setButtonLoadingState = (isLoading) => {
-                const buttonText = generateBuildButton.querySelector('span');
+            const setButtonLoadingState = (button, isLoading, originalText) => {
+                const buttonTextSpan = button.querySelector('span');
                 if (isLoading) {
-                    generateBuildButton.disabled = true;
-                    generateBuildButton.classList.add('opacity-75', 'cursor-not-allowed');
-                    buttonText.innerHTML = '<span class="spinner"></span>';
+                    button.disabled = true;
+                    button.classList.add('opacity-75', 'cursor-not-allowed');
+                    buttonTextSpan.innerHTML = '<span class="spinner"></span>';
                 } else {
-                    generateBuildButton.disabled = false;
-                    generateBuildButton.classList.remove('opacity-75', 'cursor-not-allowed');
-                    buttonText.innerHTML = '✨ Montar PC com IA';
+                    button.disabled = false;
+                    button.classList.remove('opacity-75', 'cursor-not-allowed');
+                    buttonTextSpan.innerHTML = originalText;
                 }
             };
             
@@ -372,12 +383,38 @@
                 errorMessageDiv.classList.remove('hidden');
                 aiAnalysisDiv.classList.add('hidden');
                 buildTableBody.parentElement.classList.add('hidden');
+                resultsActions.classList.add('hidden');
             };
             
-            clearResultsButton.addEventListener('click', () => {
+            const resetUI = () => {
                 aiResultsContainer.classList.add('hidden');
-                pcRequestInput.value = '';
+                currentBuildData = null;
+                optimizationResultContainer.classList.add('hidden');
+                fpsAnalysisContainer.classList.add('hidden');
+            };
+
+            clearResultsButton.addEventListener('click', () => {
+                 pcRequestInput.value = '';
+                 resetUI();
             });
+            
+            async function callApi(action, payload) {
+                const response = await fetch('/.netlify/functions/api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, payload }),
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json();
+                    throw new Error(errorBody.error || 'Falha na comunicação com o backend.');
+                }
+                
+                const result = await response.json();
+                if (result.error) throw new Error(result.error);
+                
+                return result;
+            }
 
             generateBuildButton.addEventListener('click', async () => {
                 const prompt = pcRequestInput.value;
@@ -386,142 +423,177 @@
                     return;
                 }
 
-                setButtonLoadingState(true);
+                setButtonLoadingState(generateBuildButton, true, '✨ Montar PC com IA');
+                resetUI();
                 aiResultsContainer.classList.remove('hidden');
                 errorMessageDiv.classList.add('hidden');
+                resultsActions.classList.add('hidden');
                 buildTableBody.innerHTML = '';
                 buildTableFoot.innerHTML = '';
                 aiAnalysisDiv.innerHTML = '';
 
-
                 try {
-                    const chatHistory = [{
-                        role: "user",
-                        parts: [{ text: `O usuário brasileiro pediu uma sugestão de PC com a seguinte descrição: "${prompt}". Sua tarefa é criar uma lista de peças de computador (build) plausível para o mercado brasileiro, respeitando o orçamento mencionado. Para cada item na lista 'build', o campo 'component' DEVE estar em português (ex: Placa-Mãe, Processador, Placa de Vídeo, Fonte de Alimentação, Gabinete, Memória RAM, Armazenamento). Para cada componente, forneça também uma estimativa de preço realista em BRL (Reais), com um valor mínimo (minPrice) e máximo (maxPrice) como números inteiros, e um campo 'productUrl' que seja um link de busca no Google Shopping para o nome do produto (ex: 'https://www.google.com/search?q=AMD+Ryzen+5+5600G&tbm=shop'). Finalmente, forneça uma breve análise sobre a build, explicando por que ela é adequada para o pedido do usuário. A resposta deve ser um objeto JSON.` }]
-                    }];
-                    
-                    const payload = {
-                        contents: chatHistory,
-                        generationConfig: {
-                            responseMimeType: "application/json",
-                            responseSchema: {
-                                type: "OBJECT",
-                                properties: {
-                                    analysis: { type: "STRING" },
-                                    build: {
-                                        type: "ARRAY",
-                                        items: {
-                                            type: "OBJECT",
-                                            properties: {
-                                                component: { type: "STRING" },
-                                                name: { type: "STRING" },
-                                                minPrice: { type: "NUMBER" },
-                                                maxPrice: { type: "NUMBER" },
-                                                productUrl: { type: "STRING" }
-                                            },
-                                            required: ["component", "name", "minPrice", "maxPrice", "productUrl"]
-                                        }
-                                    }
-                                },
-                                required: ["analysis", "build"]
-                            }
-                        }
-                    };
+                    const result = await callApi('generateBuild', { prompt });
 
-                    const apiKey = "AIzaSyCW3KYZrARWEmPD6FzMfnm4lsfQXbmn9ZI"; 
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (!response.ok) {
-                        let errorBody = 'Não foi possível obter detalhes do erro.';
-                        try {
-                            const errorJson = await response.json();
-                            errorBody = errorJson.error?.message || JSON.stringify(errorJson);
-                        } catch (e) {
-                            errorBody = response.statusText;
-                        }
-                       throw new Error(`A API retornou um erro (${response.status}): ${errorBody}`);
-                    }
-
-                    const result = await response.json();
-
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        
-                        const jsonText = result.candidates[0].content.parts[0].text;
-                        const data = JSON.parse(jsonText);
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        const data = JSON.parse(result.candidates[0].content.parts[0].text);
+                        currentBuildData = data; 
                         
                         aiAnalysisDiv.textContent = data.analysis;
                         aiAnalysisDiv.classList.remove('hidden');
-                        
                         buildTableBody.parentElement.classList.remove('hidden');
                         
-                        let totalMin = 0;
-                        let totalMax = 0;
+                        let total = 0;
 
-                        data.build.forEach(item => {
+                        data.build.forEach((item) => {
                             const row = buildTableBody.insertRow();
-                            row.className = 'hover:bg-slate-50';
-                            const cell1 = row.insertCell(0);
-                            const cell2 = row.insertCell(1);
-                            const cell3 = row.insertCell(2);
-                            const cell4 = row.insertCell(3);
-
-                            cell1.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900';
-                            cell2.className = 'px-6 py-4 whitespace-nowrap text-sm text-slate-500';
-                            cell3.className = 'px-6 py-4 whitespace-nowrap text-sm text-slate-500';
-                            cell4.className = 'px-6 py-4 whitespace-nowrap text-sm text-center';
-
-                            cell1.textContent = item.component;
-                            cell2.textContent = item.name;
-                            cell3.textContent = `R$ ${item.minPrice} - R$ ${item.maxPrice}`;
+                            cell(row, 0, item.component, 'font-medium text-slate-900');
+                            cell(row, 1, item.name, 'text-slate-500');
                             
-                            const linkButton = document.createElement('a');
-                            linkButton.href = item.productUrl;
-                            linkButton.target = '_blank';
-                            linkButton.rel = 'noopener noreferrer';
-                            linkButton.className = 'inline-block bg-teal-100 text-teal-700 hover:bg-teal-200 font-semibold py-1 px-3 rounded-full text-xs transition-colors';
-                            linkButton.textContent = 'Ver Preço';
-                            cell4.appendChild(linkButton);
+                            const priceCell = cell(row, 2, '', 'text-slate-500');
+                            priceCell.innerHTML = `<div class="flex flex-col"><span class="font-bold text-green-600">R$ ${item.bestPrice.toFixed(2)}</span><span class="text-xs text-slate-500">${item.store}</span></div>`;
+
+                            const actionsCell = cell(row, 3, '', 'text-center space-x-2');
+                            const linkButton = createButton('Ir à Loja', 'green', `https://www.google.com/search?q=${encodeURIComponent(item.name)} ${encodeURIComponent(item.store)}&tbm=shop`);
+                            const explainButton = createButton('Explicar', 'sky', () => showExplanation(item.component, item.name));
+                            actionsCell.appendChild(linkButton);
+                            actionsCell.appendChild(explainButton);
                             
-                            totalMin += item.minPrice;
-                            totalMax += item.maxPrice;
+                            total += item.bestPrice;
                         });
 
-                        const footerRow = buildTableFoot.insertRow();
-                        const totalCellLabel = footerRow.insertCell(0);
-                        totalCellLabel.colSpan = 2;
-                        totalCellLabel.className = 'px-6 py-4 text-right text-sm font-bold text-slate-800';
-                        totalCellLabel.textContent = 'Total Estimado:';
-                        
-                        const totalCellValue = footerRow.insertCell(1);
-                        totalCellValue.colSpan = 2;
-                        totalCellValue.className = 'px-6 py-4 text-left text-sm font-bold text-slate-800';
-                        totalCellValue.textContent = `R$ ${totalMin} - R$ ${totalMax}`;
-                        
-                        const disclaimerRow = buildTableFoot.insertRow();
-                        const disclaimerCell = disclaimerRow.insertCell(0);
-                        disclaimerCell.colSpan = 4;
-                        disclaimerCell.className = 'px-6 py-2 text-center text-xs text-slate-500';
-                        disclaimerCell.textContent = '* Este é um valor base estimado e não inclui frete ou promoções específicas. Os preços podem variar.';
-
+                        updateTotals(total);
+                        resultsActions.classList.remove('hidden');
                         aiResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
                     } else {
                         throw new Error("A resposta da IA não continha os dados esperados.");
                     }
                 } catch (error) {
-                    console.error("Erro ao chamar a API Gemini:", error);
-                    displayError(`Ocorreu um erro ao gerar a build. Por favor, tente novamente. Detalhes: ${error.message}`);
+                    console.error("Erro ao gerar build:", error);
+                    displayError(`Ocorreu um erro ao gerar a build: ${error.message}`);
                 } finally {
-                    setButtonLoadingState(false);
+                    setButtonLoadingState(generateBuildButton, false, '✨ Montar PC com IA');
                 }
+            });
+
+            const cell = (row, index, text, className = '') => {
+                const cell = row.insertCell(index);
+                cell.className = `px-6 py-4 whitespace-nowrap text-sm ${className}`;
+                cell.textContent = text;
+                return cell;
+            };
+
+            const createButton = (text, color, action) => {
+                const button = document.createElement(typeof action === 'string' ? 'a' : 'button');
+                button.className = `inline-block bg-${color}-100 text-${color}-700 hover:bg-${color}-200 font-semibold py-1 px-3 rounded-full text-xs transition-colors`;
+                button.textContent = text;
+                if (typeof action === 'string') {
+                    button.href = action;
+                    button.target = '_blank';
+                    button.rel = 'noopener noreferrer';
+                } else {
+                    button.onclick = action;
+                }
+                return button;
+            };
+
+            const updateTotals = (total) => {
+                 buildTableFoot.innerHTML = '';
+                 const footerRow = buildTableFoot.insertRow();
+                 const totalCellLabel = footerRow.insertCell(0);
+                 totalCellLabel.colSpan = 2;
+                 totalCellLabel.className = 'px-6 py-4 text-right text-sm font-bold text-slate-800';
+                 totalCellLabel.textContent = 'Total Estimado:';
+                 
+                 const totalCellValue = footerRow.insertCell(1);
+                 totalCellValue.colSpan = 2;
+                 totalCellValue.className = 'px-6 py-4 text-left text-sm font-bold text-slate-800';
+                 totalCellValue.textContent = `R$ ${total.toFixed(2)}`;
+                 
+                 const disclaimerRow = buildTableFoot.insertRow();
+                 const disclaimerCell = disclaimerRow.insertCell(0);
+                 disclaimerCell.colSpan = 4;
+                 disclaimerCell.className = 'px-6 py-2 text-center text-xs text-slate-500 font-semibold';
+                 disclaimerCell.innerHTML = '&#9888;&#65039; Preços são <strong>estimativas</strong> baseadas em uma simulação de busca e podem variar.';
+            };
+
+            optimizeBuildButton.addEventListener('click', async () => {
+                if (!currentBuildData) return;
+                setButtonLoadingState(optimizeBuildButton, true, '✨ Otimizar Custo-Benefício');
+                optimizationResultContainer.classList.add('hidden');
+                
+                try {
+                    const result = await callApi('optimizeBuild', { build: currentBuildData.build, prompt: pcRequestInput.value });
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        optimizationResultText.innerHTML = result.candidates[0].content.parts[0].text.replace(/\n/g, '<br><br>');
+                        optimizationResultContainer.classList.remove('hidden');
+                        optimizationResultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else { throw new Error("A resposta da IA estava vazia."); }
+                } catch (error) {
+                     optimizationResultText.textContent = `Falha ao obter sugestão: ${error.message}`;
+                     optimizationResultContainer.classList.remove('hidden');
+                } finally {
+                    setButtonLoadingState(optimizeBuildButton, false, '✨ Otimizar Custo-Benefício');
+                }
+            });
+
+            analyzeFpsButton.addEventListener('click', async () => {
+                if (!currentBuildData) return;
+                setButtonLoadingState(analyzeFpsButton, true, '🎮 Analisar Desempenho');
+                fpsAnalysisContainer.classList.add('hidden');
+
+                try {
+                    const result = await callApi('analyzeFps', { build: currentBuildData.build });
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        const data = JSON.parse(result.candidates[0].content.parts[0].text);
+                        fpsTextAnalysis.textContent = data.analysis;
+                        if(fpsChartInstance) fpsChartInstance.destroy();
+                        
+                        fpsChartInstance = new Chart(fpsChartCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels: data.games.map(g => g.gameName),
+                                datasets: [{
+                                    data: data.games.map(g => g.estimatedFps),
+                                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                                    borderColor: 'rgba(59, 130, 246, 1)',
+                                    borderWidth: 1, borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                scales: { y: { beginAtZero: true } },
+                                plugins: { legend: { display: false }, title: { display: true, text: 'Desempenho Estimado em Jogos Populares (1080p, Alto)' } },
+                                maintainAspectRatio: false
+                            }
+                        });
+                        fpsAnalysisContainer.classList.remove('hidden');
+                        fpsAnalysisContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else { throw new Error('A IA não retornou uma análise de FPS.'); }
+                } catch(error) {
+                    fpsTextAnalysis.textContent = `Falha ao obter análise: ${error.message}`;
+                    fpsAnalysisContainer.classList.remove('hidden');
+                } finally {
+                    setButtonLoadingState(analyzeFpsButton, false, '🎮 Analisar Desempenho');
+                }
+            });
+
+            const showExplanation = async (component, name) => {
+                modalTitle.textContent = `Explicando: ${component}`;
+                modalBody.innerHTML = `<div class="flex justify-center items-center h-24"><div class="spinner modal-spinner"></div></div>`;
+                explanationModal.classList.remove('hidden');
+                try {
+                    const result = await callApi('explainComponent', { component, name });
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        modalBody.innerHTML = `<p class="text-slate-700">${result.candidates[0].content.parts[0].text.replace(/\n/g, '<br><br>')}</p>`;
+                    } else { throw new Error('A IA não retornou uma explicação.'); }
+                } catch(error) {
+                    modalBody.innerHTML = `<p class="text-red-600">Desculpe, não foi possível carregar a explicação.</p>`;
+                }
+            };
+
+            closeModalButton.addEventListener('click', () => explanationModal.classList.add('hidden'));
+            explanationModal.addEventListener('click', (e) => {
+                if(e.target === explanationModal) explanationModal.classList.add('hidden');
             });
 
             const audienceCards = document.querySelectorAll('.audience-card');
@@ -534,111 +606,54 @@
                 card.addEventListener('click', () => {
                     const targetId = card.dataset.target;
                     const targetContent = document.getElementById(`${targetId}-value`);
-
                     if (activeCard === card) {
                         card.classList.remove('border-teal-500', 'bg-teal-50');
                         activeCard = null;
-                        
                         valueContents.forEach(content => content.classList.add('hidden'));
                         defaultContent.classList.remove('hidden');
-
                     } else {
-                        if (activeCard) {
-                            activeCard.classList.remove('border-teal-500', 'bg-teal-50');
-                        }
-                        
+                        if (activeCard) activeCard.classList.remove('border-teal-500', 'bg-teal-50');
                         card.classList.add('border-teal-500', 'bg-teal-50');
                         activeCard = card;
-
                         valueContents.forEach(content => content.classList.add('hidden'));
-                        if (targetContent) {
-                            targetContent.classList.remove('hidden');
-                        }
+                        if (targetContent) targetContent.classList.remove('hidden');
                         valueDisplay.classList.remove('opacity-0');
                     }
                 });
             });
 
-            const ctx = document.getElementById('monetizationChart').getContext('2d');
-            const monetizationChart = new Chart(ctx, {
+            new Chart(document.getElementById('monetizationChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['Marketing de Afiliados', 'Publicidade (Adsense)', 'Conteúdo e YouTube'],
                     datasets: [{
-                        label: 'Fontes de Receita',
                         data: [70, 20, 10],
                         backgroundColor: ['#14b8a6', '#06b6d4', '#0ea5e9'],
-                        borderColor: '#f8fafc',
-                        borderWidth: 4,
-                        hoverOffset: 8
+                        borderColor: '#f8fafc', borderWidth: 4, hoverOffset: 8
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '65%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#0f172a',
-                            titleFont: { size: 14, weight: 'bold' },
-                            bodyFont: { size: 12 },
-                            padding: 10,
-                            cornerRadius: 4,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) { label += ': '; }
-                                    if (context.parsed !== null) { label += context.parsed + '%'; }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => `${c.label}: ${c.parsed}%` } } } }
             });
             
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            const hamburgerIcon = document.getElementById('hamburger-icon');
-
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                hamburgerIcon.children[0].classList.toggle('rotate-45');
-                hamburgerIcon.children[0].classList.toggle('translate-y-2');
-                hamburgerIcon.children[1].classList.toggle('opacity-0');
-                hamburgerIcon.children[2].classList.toggle('-rotate-45');
-                hamburgerIcon.children[2].classList.toggle('-translate-y-2');
-            });
-            
-            document.querySelectorAll('.mobile-nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                    hamburgerIcon.children[0].classList.remove('rotate-45', 'translate-y-2');
-                    hamburgerIcon.children[1].classList.remove('opacity-0');
-                    hamburgerIcon.children[2].classList.remove('-rotate-45', '-translate-y-2');
-                });
-            });
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            document.querySelectorAll('.mobile-nav-link').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
 
             const sections = document.querySelectorAll('main section');
             const navLinks = document.querySelectorAll('.nav-link');
-            
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.getAttribute('id');
                         navLinks.forEach(link => {
-                            link.classList.remove('active', 'text-teal-600');
-                            if (link.getAttribute('href') === `#${id}`) {
-                                link.classList.add('active', 'text-teal-600');
-                            }
+                            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                            link.classList.toggle('text-teal-600', link.getAttribute('href') === `#${id}`);
                         });
                     }
                 });
-            }, observerOptions);
-
-            sections.forEach(section => { observer.observe(section); });
+            }, { threshold: 0.4 });
+            sections.forEach(section => observer.observe(section));
         });
     </script>
 </body>
