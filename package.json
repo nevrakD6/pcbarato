@@ -1,0 +1,9 @@
+{
+  "name": "pcbarato-backend",
+  "version": "1.0.0",
+  "description": "Backend function for PCBarato",
+  "main": "api.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC"
+}
